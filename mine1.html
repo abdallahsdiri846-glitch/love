@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bestie Proposal 💖</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #000000, #ff69b4);
+      overflow-x: hidden;
+      color: #fff;
+    }
+    .hidden { display: none; }
+    .fade-in { animation: fadeIn 1s forwards; }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+
+    /* Lock Screen */
+    #lock-screen { display:flex; justify-content:center; align-items:center; height:100%; }
+    .card { background:#111; padding:30px; border-radius:15px; box-shadow:0 4px 20px rgba(255,255,255,0.2); text-align:center; width:300px; }
+    .card h2 { margin-bottom:20px; color:#ff69b4; }
+    input { padding:10px; width:80%; border:2px solid #ff69b4; border-radius:10px; margin-bottom:15px; outline:none; text-align:center; }
+    button { background:#ff69b4; color:white; border:none; padding:10px 20px; border-radius:20px; cursor:pointer; transition:transform 0.2s; }
+    button:hover { transform:scale(1.05); }
+    .error { color:#ff69b4; margin-top:10px; font-size:14px; display:none; }
+    .shake { animation: shake 0.3s; }
+    @keyframes shake { 25%{transform:translateX(-5px);} 50%{transform:translateX(5px);} 75%{transform:translateX(-5px);} }
+
+    /* Main Page */
+    #main-page { text-align:center; padding:40px; position:relative; }
+    #main-page h1 { font-size:2.5em; margin-bottom:20px; color:#ff69b4; }
+    #message { font-size:1.2em; margin-bottom:30px; max-width:600px; margin:auto; min-height:60px; }
+    #bestie-btn { background:#ff69b4; border-radius:25px; font-size:1.2em; padding:12px 24px; }
+    #next-btn { background:#ff69b4; border-radius:25px; font-size:1.2em; padding:12px 24px; margin-top:20px; animation:bounceIn 1s; }
+    @keyframes bounceIn { 0%{transform:scale(0.5); opacity:0;} 60%{transform:scale(1.2); opacity:1;} 100%{transform:scale(1);} }
+
+    /* Proposal Page */
+    #proposal { text-align:center; padding:40px; color:#fff; }
+    #proposal h2 { font-size:2em; margin-bottom:20px; }
+    .proposal-btn { background:#ff69b4; border-radius:35px; padding:20px 40px; margin:20px; color:white; border:none; cursor:pointer; font-size:1.5em; position:relative; }
+    #final-message { font-size:1.5em; max-width:700px; margin:auto; margin-top:30px; }
+
+    /* Falling hearts */
+    .falling-heart { position:fixed; top:-50px; color:#ff69b4; font-size:24px; animation:fall 4s linear forwards; }
+    @keyframes fall { to{transform:translateY(110vh); opacity:0;} }
+  </style>
+</head>
+<body>
+  <!-- Lock Screen -->
+  <div id="lock-screen">
+    <div class="card" id="lock-card">
+      <h2>Enter the Secret Code 💌</h2>
+      <input type="password" id="code-input" placeholder="Secret code">
+      <br><button id="enter-btn">Enter</button>
+      <div class="error" id="error-msg">Wrong code bestie 🥺 try again</div>
+    </div>
+  </div>
+
+  <!-- Main Page -->
+  <div id="main-page" class="hidden">
+    <h1>To My Bestie 👯‍♀️</h1>
+    <p id="message"></p>
+    <button id="bestie-btn">Click me bestie 😎</button>
+    <button id="next-btn" class="hidden">Next 💌</button>
+  </div>
+
+  <!-- Proposal Page -->
+  <div id="proposal" class="hidden">
+    <h2>Will you be my girlfriend? 💍</h2>
+    <button id="yes-btn" class="proposal-btn">Yes 💖</button>
+    <button id="no-btn" class="proposal-btn">No 😢</button>
+    <div id="final-message"></div>
+  </div>
+
+  <script>
+    const enterBtn = document.getElementById('enter-btn');
+    const codeInput = document.getElementById('code-input');
+    const errorMsg = document.getElementById('error-msg');
+    const lockScreen = document.getElementById('lock-screen');
+    const mainPage = document.getElementById('main-page');
+    const bestieBtn = document.getElementById('bestie-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const message = document.getElementById('message');
+    const proposal = document.getElementById('proposal');
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
+    const finalMessage = document.getElementById('final-message');
+
+    // Typing effect
+    function typeMessage(el, text, speed=50, callback=null) {
+      el.innerHTML = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        el.innerHTML += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          if (callback) callback();
+        }
+      }, speed);
+    }
+
+    enterBtn.addEventListener('click', () => {
+      if (codeInput.value === "1204") {
+        lockScreen.style.display = "none";
+        mainPage.classList.remove("hidden");
+        mainPage.classList.add("fade-in");
+        typeMessage(message, "You are not just my friend, you are my sister, my partner in crime, and my forever bestie 💕👯‍♀️");
+      } else {
+        errorMsg.style.display = "block";
+        document.getElementById('lock-card').classList.add('shake');
+        setTimeout(() => document.getElementById('lock-card').classList.remove('shake'), 300);
+      }
+    });
+
+    bestieBtn.addEventListener('click', () => {
+      typeMessage(message, "Thank you for being my bestie, my partner in crime, and the one who always makes me laugh. Life is brighter with you 💕😂🎉", 50, () => {
+        nextBtn.classList.remove('hidden');
+      });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      mainPage.style.display = "none";
+      proposal.classList.remove("hidden");
+      proposal.classList.add("fade-in");
+    });
+
+    // Proposal logic
+    let noCount = 0;
+    noBtn.addEventListener('mouseover', () => {
+      if (noCount < 5) {
+        noBtn.style.position = "absolute";
+        noBtn.style.left = Math.random()*80 + "vw";
+        noBtn.style.top = Math.random()*80 + "vh";
+        noCount++;
+        if (noCount === 5) {
+          typeMessage(finalMessage, "oky oky I'm kidding 😅 I mean bestfriends forever 💖👯‍♀️");
+          yesBtn.innerText = "Yes 💖";
+          noBtn.innerText = "Yes 💖";
+        }
+      }
+    });
+
+    function showFinalLove() {
+  // إخفاء صفحة الاقتراح
+  proposal.innerHTML = "";
+
+  // إنشاء عنصر للرسالة النهائية
+  const finalDiv = document.createElement('div');
+  finalDiv.id = "final-message";
+  document.body.appendChild(finalDiv);
+
+  // نص الرسالة الكبيرة
+  const bigText = "Thank you for being in my life. You are my happiness, my dream, and my forever bestie. I promise to always try my best to make you smile, to support you, and to love you endlessly 💖💫🌹";
+
+  // تأثير الكتابة التدريجي
+  typeMessage(finalDiv, bigText, 40);
+
+  // قلوب متساقطة
+  for (let i = 0; i < 50; i++) {
+    let heart = document.createElement('div');
+    heart.className = 'falling-heart';
+    heart.innerHTML = '💖';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 4000);
+  }
+}
+
+// ربط الأزرار بالرسالة النهائية
+yesBtn.addEventListener('click', showFinalLove);
+noBtn.addEventListener('click', showFinalLove);
+</script>
+</body>
+</html>
